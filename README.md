@@ -70,4 +70,4 @@ The retrieve() method returns a list of rectangles. This method is inefficient w
 
 On the other hand, we have the retrieveFast() method. This method is more intelligent and efficient when there are many elements per node. But it has a problem: it doesn't work when a node is not full.
 
-Please, you watch <a href="https://www.youtube.com/watch?v=HtKyIH1ngGs" target="_blank">this video in YouTube</a> to understand it. You'll understand quickly.
+Please, watch <a href="https://www.youtube.com/watch?v=HtKyIH1ngGs" target="_blank">this video</a> to understand it. You'll understand quickly.
