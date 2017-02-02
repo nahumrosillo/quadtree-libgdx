@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.Array;
 public class QuadTree
 {
     //  --- Configuration
-    private static int MAX_OBJECTS_BY_NODE = 5;
+    private static int MAX_OBJECTS_BY_NODE = 10;
     private static int MAX_LEVEL = 6;
     //  ---
 
@@ -105,6 +105,7 @@ public class QuadTree
         if (index != -1 & nodes[0] != null)
             nodes[index].retrieveFast(list, area);
 
+        //  This if(..) is configurable: only process elements in MAX_LEVEL and MAX_LEVEL-1
         if (level == MAX_LEVEL || level == MAX_LEVEL-1)
             list.addAll(objects);
 

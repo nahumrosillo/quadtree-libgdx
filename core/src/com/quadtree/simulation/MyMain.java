@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
@@ -29,31 +28,31 @@ public class MyMain extends Game
 {
     static float WIDTH_WORLD = 1280;
     static float HEIGHT_WORLD = 720;
-
     static int NUM_RECTANGLES = 25000;
 
     long numCollision;
 
-	SpriteBatch batch;
 	Texture img, bad;
 	Sprite sprite;
 	ShapeRenderer shape;
 
-	Viewport viewport, viewport2;
-	OrthographicCamera camera, camera2;
+	Viewport viewport;
+	OrthographicCamera camera;
 
 	boolean move;
 
 	//  QuadTree
 	QuadTree quadTree;
-	Sprite player1, player2;
+    Array<Rectangle> allRectangles, allZones, list;
+
+    //  Player
+    Sprite player1;
 	Rectangle rPlayer;
-	Array<Rectangle> allRectangles, list;
-	Array<Rectangle> allSprites;
-	Array<Rectangle> allZones;
 
 
 	//  Scene2d
+    OrthographicCamera camera2;
+    Viewport viewport2;
     Stage stage;
     TextButton buttonMove;
     TextButton buttonFPS;
@@ -71,28 +70,26 @@ public class MyMain extends Game
         camera = new OrthographicCamera();
         camera.translate(WIDTH_WORLD*0.5f, HEIGHT_WORLD*0.5f, 0);
         camera.update();
-
         viewport = new FitViewport(WIDTH_WORLD, HEIGHT_WORLD, camera);
-		batch = new SpriteBatch();
-		bad = new Texture("badlogic.jpg");
-		sprite = new Sprite(img);
 
+        //  Player
+		bad = new Texture("badlogic.jpg");
 		player1 = new Sprite(bad);
 		player1.setPosition(900, 200);
+        rPlayer = new Rectangle(700, 400, 5, 5);
 
-		allRectangles = new Array<Rectangle>();
-		quadTree = new QuadTree(0, new Rectangle(50, 50, WIDTH_WORLD-250, HEIGHT_WORLD-100));
+
+        //  QuadTree
+        quadTree = new QuadTree(0, new Rectangle(50, 50, WIDTH_WORLD-250, HEIGHT_WORLD-100));
+        allRectangles = new Array<Rectangle>();
 		list = new Array<Rectangle>();
-
-		allSprites = new Array<Rectangle>();
 		allZones = new Array<Rectangle>();
 
-		rPlayer = new Rectangle(700, 400, 5, 5);
-
+        //  Scene2d
 		camera2 = new OrthographicCamera();
 		viewport2 = new FitViewport(WIDTH_WORLD, HEIGHT_WORLD, camera2);
-
 		stage = new Stage(viewport2);
+
 		TextButton.TextButtonStyle tbs = new TextButton.TextButtonStyle();
 		tbs.fontColor = Color.BLACK;
 		tbs.font = new BitmapFont(Gdx.files.internal("font.fnt"));
@@ -107,13 +104,13 @@ public class MyMain extends Game
         buttonFPS = new TextButton("FPS", tbs);
         buttonFPS.setPosition(1100, 100);
 
-        buttonNumElementos = new TextButton("NumElementos", tbs);
+        buttonNumElementos = new TextButton("NumElements", tbs);
         buttonNumElementos.setPosition(1080, 200);
 
-        buttonNumCompara = new TextButton("NumCompara", tbs);
+        buttonNumCompara = new TextButton("NumCompare", tbs);
         buttonNumCompara.setPosition(1080, 300);
 
-        buttonNumCollision = new TextButton("Collision", tbs);
+        buttonNumCollision = new TextButton("TotalCollision", tbs);
         buttonNumCollision.setPosition(1100, 400);
 
         Gdx.input.setInputProcessor(stage);
@@ -133,9 +130,9 @@ public class MyMain extends Game
         stage.addActor(buttonNumCompara);
         stage.addActor(buttonNumCollision);
 
+
+        //  Create NUM_RECTANGLES in the simulation
         createRectangles();
-
-
 	}
 
 	private void createRectangles()
@@ -189,7 +186,6 @@ public class MyMain extends Game
             for (Rectangle s : allRectangles)
                 s.x += (15 * Gdx.graphics.getDeltaTime());
         }
-
 
         allZones.clear();
         quadTree.getZones(allZones);
@@ -282,11 +278,8 @@ public class MyMain extends Game
 	@Override
 	public void dispose ()
     {
-		batch.dispose();
-		img.dispose();
 		bad.dispose();
 		shape.dispose();
-
 	}
 
     @Override
