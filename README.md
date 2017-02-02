@@ -5,7 +5,7 @@
 
 ## Description
 PR QuadTree implementation to detect collision in 2D Space. It is optimized and developed for LibGDX.
-This implementation use (depends) the Array class and Rectangle class, so it isn't a generic quadtree.
+This implementation uses (depends) the Array class and Rectangle class, so it isn't a generic quadtree.
 
 ## How to create it
 
