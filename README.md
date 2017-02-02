@@ -33,7 +33,7 @@ quadTree.insert(r3);
 ```java
 Array<Rectangles> allRectangles, list;
 
-// loop main
+// main loop
 // other code
 
 quadTree.clear()
@@ -60,14 +60,33 @@ for (Rectangle r : list)
 }
 
 //	other code
-//	end loop main
+//	end main loop
 
 ```
 
 ## There's more... the retrieveFast method
+If you want to process the tree like any quadtree then use the retrieve() method. It's simple. If you want a plus of efficiency then use the retrieveFast method, but a configuration is required.
 
 The retrieve() method returns a list of rectangles. This method is inefficient when there are many elements per node, because if there are elements between nodes, then it will return elements that are not close to the focus.
 
 On the other hand, we have the retrieveFast() method. This method is more intelligent and efficient when there are many elements per node. But it has a problem: it doesn't work when a node is not full.
 
 Please, watch <a href="https://www.youtube.com/watch?v=HtKyIH1ngGs" target="_blank">this video</a> to understand it. You'll understand quickly.
+
+```java
+public Array<Rectangle> retrieveFast(Array<Rectangle> list, Rectangle area)
+{
+	int index = getIndex(area);
+
+	if (index != -1 & nodes[0] != null)
+		nodes[index].retrieveFast(list, area);
+
+	if (level == MAX_LEVEL || level == MAX_LEVEL-1) // (*)
+		list.addAll(objects);
+
+	return list;
+}
+```
+(*) You can discard some levels, so only process those levels that are complete. Depending on your game, this method offers optimum configuration, but this requires a few trial-and-error method.In this case, it only processes the deepest levels of the tree.
+
+In the worst case, If this is not well configured then there will be elements that collide and do not detect them.
